@@ -1,12 +1,14 @@
 import './App.css'
+import Sidebar from './components/sidebar.tsx'
 
 function App() {
 
   return (
     <>
-      <h1 className="bg-sky-500">
-        Hello world!
-      </h1>
+      <Sidebar />
+      <div className='pl-3 lg:pl-50'>
+        <h1>Hello world!</h1>
+      </div>
     </>
   )
 }
