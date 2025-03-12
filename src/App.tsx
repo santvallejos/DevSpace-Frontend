@@ -1,14 +1,14 @@
 import './App.css'
-import Sidebar from './components/sidebar.tsx'
+import Layout from './layout'
+import AppDashboard from './components/app-dashboard'
 
 function App() {
-
   return (
     <>
-      <Sidebar />
-      <div className='pl-3 lg:pl-50'>
-        <h1>Hello world!</h1>
-      </div>
+    {/* Layaout del sidebar */}
+      <Layout>
+        <AppDashboard />
+      </Layout>
     </>
   )
 }

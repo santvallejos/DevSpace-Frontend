@@ -1,8 +1,11 @@
-function Sidebar() {
+import {
+    Sidebar
+  } from "@/components/ui/sidebar"
+  
+  function AppSidebar() {
     return (
-        <>
-            <div id="hs-sidebar-content-push" className="hs-overlay [--auto-close:lg] lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 w-48 hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform h-full hidden fixed top-0 start-0 bottom-0 z-60 bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" role="dialog" aria-label="Sidebar" >
-                <div className="flex flex-col h-full">
+      <Sidebar>
+          <div className="flex flex-col h-full">
                     <header className="p-4 flex justify-between items-center gap-x-2">
                         <div className="flex items-center gap-x-2">
                             <img src="icons/DevSpace-blue-icon.png" alt="" className="w-5 h-5" />
@@ -34,7 +37,6 @@ function Sidebar() {
                                         My Unit
                                     </a>
                                 </li>
-
                                 <li className="hs-accordion" id="users-accordion">
                                     <a className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg dark:text-white" href="">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-star"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" /></svg>
@@ -86,19 +88,9 @@ function Sidebar() {
                                 <a href='https://cafecito.app/santvallejos' rel='noopener' target='_blank'><img srcSet='https://cdn.cafecito.app/imgs/buttons/button_5.png 1x, https://cdn.cafecito.app/imgs/buttons/button_5_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_5_3.75x.png 3.75x' src='https://cdn.cafecito.app/imgs/buttons/button_5.png' alt='Invitame un café en cafecito.app' /></a>
                             </div>
                     </footer>
-                </div>
-            </div>
-            <div className="lg:ml-48 flex-1 transition-all duration-300">
-                <div className="lg:hidden p-2">
-                    <button type="button" className="flex justify-center items-center gap-x-3 size-8 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-sidebar-content-push" aria-label="Toggle navigation" data-hs-overlay="#hs-sidebar-content-push">
-                        <svg className="sm:hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M15 3v18" /><path d="m8 9 3 3-3 3" /></svg>
-                        <svg className="hidden sm:block shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M15 3v18" /><path d="m10 15-3-3 3-3" /></svg>
-                        <span className="sr-only">Navigation Toggle</span>
-                    </button>
-                </div>
-            </div>
-        </>
+          </div>
+      </Sidebar>
     )
-}
+  }
 
-export default Sidebar;
+export default AppSidebar;
