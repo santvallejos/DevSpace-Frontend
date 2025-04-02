@@ -28,10 +28,12 @@ function AppDashboard(){
     return(
         <>
         <section className="p-5">
+          {/* section title */}
           <div className="flex justify-between items-center mb-5">
             <h1 className="text-2xl font-bold">Resource Dashboard</h1>
           </div>        
           <div className="flex border-b mb-6 overflow-x-auto w-full relative">
+            {/* Navigation buttons on the dashboard */}
             <button 
               ref={buttonRefs.recent}
               className={`px-4 py-2 text-sm ${activeSection === "recent" ? "font-medium" : "text-gray-500"} whitespace-nowrap`}
@@ -57,7 +59,7 @@ function AppDashboard(){
             <div className="absolute bottom-0 h-0.5 bg-blue-500" style={indicatorStyle}/>
           </div>
 
-          
+          {/* Dashboard section */}
           {activeSection === "recent" && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
               <CardResource/>
@@ -66,7 +68,6 @@ function AppDashboard(){
               <CardResource/>
             </div>
           )}
-          
           {activeSection === "recommended" && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
               <CardResource/>
@@ -74,7 +75,6 @@ function AppDashboard(){
               <CardResource/>
             </div>
           )}
-          
           {activeSection === "favorites" && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
               <CardResource/>

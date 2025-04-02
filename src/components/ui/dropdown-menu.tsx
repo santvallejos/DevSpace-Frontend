@@ -30,7 +30,7 @@ function DropdownMenuTrigger({
 }
 
 function DropdownMenuContent({
-  className="mr-5",
+  className="mr-6",
   sideOffset = 4,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {

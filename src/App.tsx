@@ -1,7 +1,7 @@
 import './App.css'
 import Layout from './layout'
-import AppDashboard from './components/app-dashboard'
-import MyUnit from './components/my-unit';
+import AppDashboard from './components/ResourceDashboard'
+import MyUnit from './components/Unit';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {

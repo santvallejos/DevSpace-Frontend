@@ -2,15 +2,15 @@ function CardResource() {
     return (
         <>
                 {/* Resource Card */}
-                <div className="border border-gray-200 rounded-lg p-4 bg-white">
+                <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800">
                     <div className="flex justify-between items-start mb-2">
                         {/* Tittle */}
-                        <h3 className="text-lg font-semibold truncate max-w-[70%]" title="React Documentation">React Documentation</h3>
+                        <h3 className="text-lg font-semibold truncate max-w-[70%] dark:text-white" title="React Documentation">React Documentation</h3>
                         {/* Label favorites */}
                         <label className="flex justify-end relative cursor-pointer select-none">
                             <input type="checkbox" className="absolute opacity-0 cursor-pointer peer" />
                             <svg
-                                className="relative w-[30px] h-[30px] transition-all duration-300 fill-[#666] hover:scale-110 peer-checked:fill-[#ffeb49]"
+                                className="relative w-[30px] h-[30px] transition-all duration-300 fill-[#666] dark:fill-[#999] hover:scale-110 peer-checked:fill-[#ffeb49] dark:peer-checked:fill-[#ffeb49]"
                                 height="24px"
                                 id="Layer_1"
                                 version="1.2"
@@ -26,15 +26,18 @@ function CardResource() {
                     </div>
 
                     {/* Folder */}
-                    <div className="text-sm text-gray-500 mb-2 truncate" title="Frontend Resources">Frontend Resources</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 truncate" title="Frontend Resources">
+                        Frontend Resources
+                    </div>
+                    {/* URL */}
                     <div className="mb-4 flex">
-                        {/* Link */}
-                        <div className="border border-gray-200 rounded flex items-center w-full bg-gray-50 overflow-hidden">
-                            <div className="overflow-x-auto whitespace-nowrap py-2 px-3 flex-grow text-sm text-blue-500 no-scroll">
+                        <div className="border border-gray-200 dark:border-gray-700 rounded flex items-center w-full bg-gray-50 dark:bg-gray-900 overflow-hidden">
+                            <div className="overflow-x-auto whitespace-nowrap py-2 px-3 flex-grow text-sm text-blue-500 dark:text-blue-400 no-scroll">
                                 https://reactjs.org/docs/getting-started.html
                             </div>
+                            {/* Copy URL */}
                             <button
-                                className="p-2 text-gray-500 hover:text-blue-500 border-l border-gray-200 bg-white"
+                                className="p-2 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
                                 title="Copy URL"
                                 onClick={() => {
                                     navigator.clipboard.writeText("https://reactjs.org/docs/getting-started.html");
@@ -49,16 +52,21 @@ function CardResource() {
 
                     {/* Buttons */}
                     <div className="flex justify-between items-center">
-                        <button className="font-medium flex gap-1 hover:text-blue-500">
+                        {/* Open */}
+                        <button className="font-medium flex gap-1 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400">
                             <span>
                                 Open
                             </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-share-3"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M13 4v4c-6.575 1.028 -9.02 6.788 -10 12c-.037 .206 5.384 -5.962 10 -6v4l8 -7l-8 -7z" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-share-3"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M13 4v4c-6.575 1.028 -9.02 6.788 -10 12c-.037 .206 5.384 -5.962 10 -6v4l8 -7l-8 -7z" /></svg>
                         </button>
                         <div className="flex space-x-2">
-                            <button className="text-base hover:text-yellow-500"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg></button>
-                            <button className="text-base hover:text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                            {/* Edit */}
+                            <button className="text-base hover:text-yellow-500 dark:text-gray-300 dark:hover:text-yellow-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                            </button>
+                            {/* Delete */}
+                            <button className="text-base hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                             </button>
                         </div>
                     </div>
