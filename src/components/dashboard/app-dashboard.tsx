@@ -3,7 +3,7 @@ import CardResource from "../ui/card-resource";
 function AppDashboard(){
     return(
         <>
-        <div className="p-6 w-full h-full flex flex-col flex-grow">
+        <div className="pl-4 pr-4 w-full flex flex-col flex-grow">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">Resource Dashboard</h1>
             <button className="bg-blue-500 text-white px-4 py-2 rounded-md flex items-center">
@@ -18,7 +18,12 @@ function AppDashboard(){
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        <div className="pl-4 pr-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        <CardResource/>
+        <CardResource/>
+        <CardResource/>
+        <CardResource/>
+        <CardResource/>
         <CardResource/>
         </div>
         </>
