@@ -1,11 +1,19 @@
-function CardResource() {
+interface ResourceProps {
+    name: string;
+    folderName: string;
+    url: string;
+}
+
+function CardResource(props: ResourceProps) {
+    const {name, folderName, url} = props;
+
     return (
         <>
                 {/* Resource Card */}
                 <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800">
                     <div className="flex justify-between items-start mb-2">
                         {/* Tittle */}
-                        <h3 className="text-lg font-semibold truncate max-w-[70%] dark:text-white" title="React Documentation">React Documentation</h3>
+                        <h3 className="text-lg font-semibold truncate max-w-[70%] dark:text-white" title="React Documentation">{name}</h3>
                         {/* Label favorites */}
                         <label className="flex justify-end relative cursor-pointer select-none">
                             <input type="checkbox" className="absolute opacity-0 cursor-pointer peer" />
@@ -27,13 +35,13 @@ function CardResource() {
 
                     {/* Folder */}
                     <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 truncate" title="Frontend Resources">
-                        Frontend Resources
+                        {folderName}
                     </div>
                     {/* URL */}
                     <div className="mb-4 flex">
                         <div className="border border-gray-200 dark:border-gray-700 rounded flex items-center w-full bg-gray-50 dark:bg-gray-900 overflow-hidden">
                             <div className="overflow-x-auto whitespace-nowrap py-2 px-3 flex-grow text-sm text-blue-500 dark:text-blue-400 no-scroll">
-                                https://reactjs.org/docs/getting-started.html
+                                {url}
                             </div>
                             {/* Copy URL */}
                             <button
