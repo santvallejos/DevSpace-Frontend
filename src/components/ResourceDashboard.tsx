@@ -1,4 +1,4 @@
-import CardResource from "./ui/card-resource";
+import CardResource from "./ui/CardResource";
 import { useState, useRef, useEffect } from "react";
 import { Resource } from "@/models/resourceModel";
 import { GetFavoriteResources } from "@/services/resourcesServices";
