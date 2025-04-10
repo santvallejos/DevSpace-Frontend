@@ -4,20 +4,28 @@ export interface Resource {
     folderName: string;
     name: string;
     description: string;
+    type: number;
     url: string;
+    code: string;
+    text: string;
     favorite: boolean;
     createdOn: Date;
 }
 
 /* ejemplo de modelo de la base de datos
- {
-    "id": "67f2fc523d6fa372d5c8c5c4",
-    "folderId": "67f2fc273d6fa372d5c8c5c3",
-    "folderName": "Test Folder",
-    "name": "resource 1",
-    "description": "resource 1",
-    "url": "resource 1",
+[
+  {
+    "id": "67f5952c794c2e42a9fed6df",
+    "folderId": null,
+    "folderName": "",
+    "name": "Prueba type de recursos",
+    "description": "string",
+    "type": 0,
+    "url": "https://www.youtube.com",
+    "code": null,
+    "text": null,
     "favorite": false,
-    "createdOn": "2025-04-06T22:12:34.543Z"
-  } 
+    "createdOn": "2025-04-08T21:29:16.015Z"
+  }
+]
 */
