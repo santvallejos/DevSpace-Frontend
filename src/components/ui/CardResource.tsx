@@ -225,10 +225,10 @@ function CardResource(props: ResourceProps) {
 
             {/* Resource Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-50">
+                <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-50 animate-in fade-in-0 duration-200">
                     <div
                         ref={modalRef}
-                        className="bg-white dark:bg-gray-800 border border-black-500/75 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
+                        className="bg-white dark:bg-gray-800 border border-black-500/75 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto animate-in zoom-in-95 duration-200"
                     >
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-4">
@@ -369,8 +369,8 @@ function CardResource(props: ResourceProps) {
 
             {/* Edit Resource Modal */}
             {isEditModalOpen && (
-                <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-50">
-                    <div className="bg-white dark:bg-gray-800 border border-black-500/75 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+                <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-50 animate-in fade-in-0 duration-200">
+                    <div className="bg-white dark:bg-gray-800 border border-black-500/75 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto animate-in zoom-in-95 duration-200">
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-4">
                                 <h2 className="text-2xl font-bold dark:text-white">Edit Resource</h2>
