@@ -9,7 +9,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"  
+} from "@/components/ui/alert-dialog"
 
 interface ResourceProps {
     name: string;
@@ -26,7 +26,15 @@ function CardResource(props: ResourceProps) {
     //Propiedades que se tienen que pasar al recurso
     const { name, folderName, description, type, url, code, text, favorite } = props;
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la apertura del modal
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Estado para controlar la apertura del modal de edición
     const [isFavorite, setIsFavorite] = useState(favorite); // Estado para controlar si el recurso está marcado como favorito
+
+    // Estados para el formulario de edición
+    const [editName, setEditName] = useState(name);
+    const [editDescription, setEditDescription] = useState(description || "");
+    const [editUrl, setEditUrl] = useState(url);
+    const [editCode, setEditCode] = useState(code || "");
+    const [editText, setEditText] = useState(text || "");
 
     // Agregar un ref al modal para poder cerrarlo cuando se hace click fuera del modal
     const modalRef = useRef<HTMLDivElement>(null);
@@ -55,6 +63,25 @@ function CardResource(props: ResourceProps) {
     // Función para manejar el cambio de estado de favorito
     const handleFavoriteToggle = () => {
         setIsFavorite(!isFavorite);
+    };
+
+    // Función para abrir el modal de edición
+    const openEditModal = () => {
+        // Reiniciar los valores del formulario con los valores actuales
+        setEditName(name);
+        setEditDescription(description || "");
+        setEditUrl(url);
+        setEditCode(code || "");
+        setEditText(text || "");
+        setIsEditModalOpen(true);
+    };
+
+    // Función para guardar los cambios del formulario
+    const handleSaveChanges = () => {
+        // Aquí iría la lógica para guardar los cambios en la base de datos
+
+        // Cerrar el modal de edición
+        setIsEditModalOpen(false);
     };
 
     // Evaluar que tipo de recurso es
@@ -170,12 +197,13 @@ function CardResource(props: ResourceProps) {
                     </button>
                     <div className="flex space-x-2">
                         {/* Edit */}
-                        <button className="text-base hover:text-yellow-500 dark:text-gray-300 dark:hover:text-yellow-400">
+                        <button
+                            className="text-base hover:text-yellow-500 dark:text-gray-300 dark:hover:text-yellow-400"
+                            onClick={openEditModal}
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                         </button>
                         {/* Delete */}
-{/*                         <button className="text-base hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
-                        </button> */}
                         <AlertDialog>
                             <AlertDialogTrigger className="text-base hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
@@ -195,12 +223,12 @@ function CardResource(props: ResourceProps) {
                 </div>
             </div>
 
-            {/* Resource Modal - Updated with more transparent background */}
+            {/* Resource Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-50">
                     <div
                         ref={modalRef}
-                        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
+                        className="bg-white dark:bg-gray-800 border border-black-500/75 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
                     >
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-4">
@@ -332,6 +360,109 @@ function CardResource(props: ResourceProps) {
                                     onClick={() => setIsModalOpen(false)}
                                 >
                                     Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Resource Modal */}
+            {isEditModalOpen && (
+                <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-gray-800 border border-black-500/75 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+                        <div className="p-6">
+                            <div className="flex justify-between items-start mb-4">
+                                <h2 className="text-2xl font-bold dark:text-white">Edit Resource</h2>
+                            </div>
+
+                            {/* Edit Form */}
+                            <form className="space-y-4">
+                                {/* Name */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={editName}
+                                        onChange={(e) => setEditName(e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        required
+                                    />
+                                </div>
+
+                                {/* Description */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Description
+                                    </label>
+                                    <textarea
+                                        value={editDescription}
+                                        onChange={(e) => setEditDescription(e.target.value)}
+                                        className="w-full h-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
+                                        rows={3}
+                                    />
+                                </div>
+
+                                {/* Resource Content based on type */}
+                                {type === 0 && (
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            URL
+                                        </label>
+                                        <input
+                                            type="url"
+                                            value={editUrl}
+                                            onChange={(e) => setEditUrl(e.target.value)}
+                                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
+                                            required
+                                        />
+                                    </div>
+                                )}
+
+                                {type === 1 && (
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            Code
+                                        </label>
+                                        <textarea
+                                            value={editCode}
+                                            onChange={(e) => setEditCode(e.target.value)}
+                                            className="w-full h-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 font-mono dark:bg-gray-700 dark:text-white resize-none"
+                                            rows={8}
+                                        />
+                                    </div>
+                                )}
+
+                                {type === 2 && (
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            Text
+                                        </label>
+                                        <textarea
+                                            value={editText}
+                                            onChange={(e) => setEditText(e.target.value)}
+                                            className="w-full h-48 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
+                                            rows={8}
+                                        />
+                                    </div>
+                                )}
+                            </form>
+
+                            {/* Modal Actions */}
+                            <div className="flex justify-end space-x-3 mt-6">
+                                <button
+                                    className="px-4 py-2 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                    onClick={() => setIsEditModalOpen(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                                    onClick={handleSaveChanges}
+                                >
+                                    Save Changes
                                 </button>
                             </div>
                         </div>
