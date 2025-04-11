@@ -1,4 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"  
 
 interface ResourceProps {
     name: string;
@@ -12,25 +23,30 @@ interface ResourceProps {
 }
 
 function CardResource(props: ResourceProps) {
-    const {name, folderName, description, type, url, code, text, favorite} = props;
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isFavorite, setIsFavorite] = useState(favorite);
-    
-    // Add a ref for the modal
+    //Propiedades que se tienen que pasar al recurso
+    const { name, folderName, description, type, url, code, text, favorite } = props;
+    const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la apertura del modal
+    const [isFavorite, setIsFavorite] = useState(favorite); // Estado para controlar si el recurso está marcado como favorito
+
+    // Agregar un ref al modal para poder cerrarlo cuando se hace click fuera del modal
     const modalRef = useRef<HTMLDivElement>(null);
 
-    // Add click outside handler
+    // Cerrar el modal cuando se hace click fuera del modal
     useEffect(() => {
+        // Constante que manejará el evento de clic fuera del modal y cerrará el modal en caso de que se haga clic fuera del modal
+        // Se ejecutará cuando se abra el modal y se cerrará cuando se haga clic fuera del modal
         const handleClickOutside = (event: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 setIsModalOpen(false);
             }
         };
 
+        // Si el modal está abierto, agregar el evento de clic fuera del modal
         if (isModalOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
-        
+
+        // Limpiar el evento de clic fuera del modal cuando se cierre el modal
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
@@ -39,12 +55,11 @@ function CardResource(props: ResourceProps) {
     // Función para manejar el cambio de estado de favorito
     const handleFavoriteToggle = () => {
         setIsFavorite(!isFavorite);
-        // Aquí podrías agregar una llamada a una API o función para actualizar el estado en el backend
     };
 
-    // Función para renderizar el preview del recurso
+    // Evaluar que tipo de recurso es
     const renderResourcePreview = () => {
-        switch(type) {
+        switch (type) {
             case 0: // URL type
                 return (
                     <div className="border border-gray-200 dark:border-gray-700 rounded w-full bg-gray-50 dark:bg-gray-900 overflow-hidden">
@@ -110,9 +125,9 @@ function CardResource(props: ResourceProps) {
                 <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-semibold truncate max-w-[70%] dark:text-white" title={name}>{name}</h3>
                     <label className="flex justify-end relative cursor-pointer select-none">
-                        <input 
-                            type="checkbox" 
-                            className="absolute opacity-0 cursor-pointer peer" 
+                        <input
+                            type="checkbox"
+                            className="absolute opacity-0 cursor-pointer peer"
                             checked={isFavorite}
                             onChange={handleFavoriteToggle}
                         />
@@ -136,7 +151,7 @@ function CardResource(props: ResourceProps) {
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 truncate" title={folderName}>
                     {folderName}
                 </div>
-                
+
                 {/* Content Card: Resource Preview */}
                 <div className="mb-4 flex">
                     {renderResourcePreview()}
@@ -145,7 +160,7 @@ function CardResource(props: ResourceProps) {
                 {/* Footer Card: Buttons */}
                 <div className="flex justify-between">
                     {/* Open */}
-                    <button 
+                    <button
                         className="font-medium flex gap-1 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400"
                         onClick={() => setIsModalOpen(true)}
                     >
@@ -159,9 +174,23 @@ function CardResource(props: ResourceProps) {
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                         </button>
                         {/* Delete */}
-                        <button className="text-base hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
-                        </button>
+{/*                         <button className="text-base hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
+                        </button> */}
+                        <AlertDialog>
+                            <AlertDialogTrigger className="text-base hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you sure you want to delete this resource?</AlertDialogTitle>
+                                    <AlertDialogDescription>You are about to delete the resource <span className='font-bold text-black dark:text-white'>{name}</span>, it will remain in the trash for 30 days and then it will be automatically deleted.</AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel className="btn btn-outline">Cancel</AlertDialogCancel>
+                                    <AlertDialogAction className="btn btn-error hover:text-white hover:bg-red-500">Delete</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
                 </div>
             </div>
@@ -169,7 +198,7 @@ function CardResource(props: ResourceProps) {
             {/* Resource Modal - Updated with more transparent background */}
             {isModalOpen && (
                 <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-50">
-                    <div 
+                    <div
                         ref={modalRef}
                         className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
                     >
@@ -178,9 +207,9 @@ function CardResource(props: ResourceProps) {
                                 <h2 className="text-2xl font-bold dark:text-white">{name}</h2>
                                 <div className="flex items-center space-x-2">
                                     <label className="flex justify-end relative cursor-pointer select-none">
-                                        <input 
-                                            type="checkbox" 
-                                            className="absolute opacity-0 cursor-pointer peer" 
+                                        <input
+                                            type="checkbox"
+                                            className="absolute opacity-0 cursor-pointer peer"
                                             checked={isFavorite}
                                             onChange={handleFavoriteToggle}
                                         />
@@ -198,7 +227,7 @@ function CardResource(props: ResourceProps) {
                                     </label>
                                 </div>
                             </div>
-                            
+
                             {/* Resource Details */}
                             <div className="mb-4">
                                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
@@ -207,7 +236,7 @@ function CardResource(props: ResourceProps) {
                                 <div className="text-sm text-gray-700 dark:text-gray-300 mb-4">
                                     <span className="font-medium">Description:</span> {description || "No description available."}
                                 </div>
-                                
+
                                 {/* Resource Content */}
                                 <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-900 mb-4">
                                     {type === 0 && (
@@ -229,7 +258,7 @@ function CardResource(props: ResourceProps) {
                                             </div>
                                         </div>
                                     )}
-                                    
+
                                     {type === 1 && (
                                         <div>
                                             <div className="font-medium mb-2 text-gray-700 dark:text-gray-300">Code Snippet</div>
@@ -251,7 +280,7 @@ function CardResource(props: ResourceProps) {
                                             )}
                                         </div>
                                     )}
-                                    
+
                                     {type === 2 && (
                                         <div>
                                             <div className="font-medium mb-2 text-gray-700 dark:text-gray-300">Text Content</div>
@@ -275,10 +304,10 @@ function CardResource(props: ResourceProps) {
                                     )}
                                 </div>
                             </div>
-                            
+
                             {/* Modal Actions */}
                             <div className="flex justify-end space-x-3">
-{/*                                 <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors flex items-center gap-2">
+                                {/*                                 <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors flex items-center gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-edit">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
@@ -298,7 +327,7 @@ function CardResource(props: ResourceProps) {
                                     </svg>
                                     Delete
                                 </button> */}
-                                <button 
+                                <button
                                     className="px-4 py-2 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                                     onClick={() => setIsModalOpen(false)}
                                 >
