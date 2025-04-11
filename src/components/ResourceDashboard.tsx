@@ -55,9 +55,9 @@ function AppDashboard(){
           {/* section title */}
           <div className="flex justify-between items-center mb-5">
             <h1 className="text-2xl font-bold">Resource Dashboard</h1>
-          </div>        
+          </div>
+          {/* Navigation buttons on the dashboard */}
           <div className="flex border-b mb-6 overflow-x-auto w-full relative">
-            {/* Navigation buttons on the dashboard */}
             <button 
               ref={buttonRefs.recent}
               className={`px-4 py-2 text-sm ${activeSection === "recent" ? "font-medium" : "text-gray-500"} whitespace-nowrap`}
@@ -110,11 +110,16 @@ function AppDashboard(){
                 </div>
               ) : favoriteResources.length > 0 ? (
                 favoriteResources.map((resource, index) => (
-                  <CardResource 
+                  <CardResource
                     key={resource.id || index} 
                     name={resource.name || ''} 
                     folderName={resource.folderName || ''}
+                    description={resource.description || ''}
+                    type={resource.type }
                     url={resource.url || ''}
+                    code={resource.code || ''}
+                    text={resource.text || ''}
+                    favorite={resource.favorite}
                   />
                 ))
               ) : (
