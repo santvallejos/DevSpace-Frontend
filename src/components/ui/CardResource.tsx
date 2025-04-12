@@ -1,4 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
+import { Copy } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,6 +15,17 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogFooter,
+    DialogClose
+} from "@/components/ui/dialog"
 
 interface ResourceProps {
     name: string;
@@ -25,8 +41,6 @@ interface ResourceProps {
 function CardResource(props: ResourceProps) {
     //Propiedades que se tienen que pasar al recurso
     const { name, folderName, description, type, url, code, text, favorite } = props;
-    const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la apertura del modal
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Estado para controlar la apertura del modal de edición
     const [isFavorite, setIsFavorite] = useState(favorite); // Estado para controlar si el recurso está marcado como favorito
 
     // Estados para el formulario de edición
@@ -36,52 +50,11 @@ function CardResource(props: ResourceProps) {
     const [editCode, setEditCode] = useState(code || "");
     const [editText, setEditText] = useState(text || "");
 
-    // Agregar un ref al modal para poder cerrarlo cuando se hace click fuera del modal
-    const modalRef = useRef<HTMLDivElement>(null);
 
-    // Cerrar el modal cuando se hace click fuera del modal
-    useEffect(() => {
-        // Constante que manejará el evento de clic fuera del modal y cerrará el modal en caso de que se haga clic fuera del modal
-        // Se ejecutará cuando se abra el modal y se cerrará cuando se haga clic fuera del modal
-        const handleClickOutside = (event: MouseEvent) => {
-            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-                setIsModalOpen(false);
-            }
-        };
-
-        // Si el modal está abierto, agregar el evento de clic fuera del modal
-        if (isModalOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-
-        // Limpiar el evento de clic fuera del modal cuando se cierre el modal
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isModalOpen]);
 
     // Función para manejar el cambio de estado de favorito
     const handleFavoriteToggle = () => {
         setIsFavorite(!isFavorite);
-    };
-
-    // Función para abrir el modal de edición
-    const openEditModal = () => {
-        // Reiniciar los valores del formulario con los valores actuales
-        setEditName(name);
-        setEditDescription(description || "");
-        setEditUrl(url);
-        setEditCode(code || "");
-        setEditText(text || "");
-        setIsEditModalOpen(true);
-    };
-
-    // Función para guardar los cambios del formulario
-    const handleSaveChanges = () => {
-        // Aquí iría la lógica para guardar los cambios en la base de datos
-
-        // Cerrar el modal de edición
-        setIsEditModalOpen(false);
     };
 
     // Evaluar que tipo de recurso es
@@ -187,103 +160,34 @@ function CardResource(props: ResourceProps) {
                 {/* Footer Card: Buttons */}
                 <div className="flex justify-between">
                     {/* Open */}
-                    <button
-                        className="font-medium flex gap-1 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400"
-                        onClick={() => setIsModalOpen(true)}
-                    >
-                        <span>
+                    <Dialog>
+                        <DialogTrigger>
                             Open
-                        </span>
-                    </button>
-                    <div className="flex space-x-2">
-                        {/* Edit */}
-                        <button
-                            className="text-base hover:text-yellow-500 dark:text-gray-300 dark:hover:text-yellow-400"
-                            onClick={openEditModal}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
-                        </button>
-                        {/* Delete */}
-                        <AlertDialog>
-                            <AlertDialogTrigger className="text-base hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you sure you want to delete this resource?</AlertDialogTitle>
-                                    <AlertDialogDescription>You are about to delete the resource <span className='font-bold text-black dark:text-white'>{name}</span>, it will remain in the trash for 30 days and then it will be automatically deleted.</AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel className="btn btn-outline">Cancel</AlertDialogCancel>
-                                    <AlertDialogAction className="btn btn-error hover:text-white hover:bg-red-500">Delete</AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
-                    </div>
-                </div>
-            </div>
-
-            {/* Resource Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-50 animate-in fade-in-0 duration-200">
-                    <div
-                        ref={modalRef}
-                        className="bg-white dark:bg-gray-800 border border-black-500/75 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto animate-in zoom-in-95 duration-200"
-                    >
-                        <div className="p-6">
-                            <div className="flex justify-between items-start mb-4">
-                                <h2 className="text-2xl font-bold dark:text-white">{name}</h2>
-                                <div className="flex items-center space-x-2">
-                                    <label className="flex justify-end relative cursor-pointer select-none">
-                                        <input
-                                            type="checkbox"
-                                            className="absolute opacity-0 cursor-pointer peer"
-                                            checked={isFavorite}
-                                            onChange={handleFavoriteToggle}
-                                        />
-                                        <svg
-                                            className="relative w-[30px] h-[30px] transition-all duration-300 fill-[#666] dark:fill-[#999] hover:scale-110 peer-checked:fill-[#ffeb49] dark:peer-checked:fill-[#ffeb49]"
-                                            height="24px"
-                                            viewBox="0 0 24 24"
-                                            width="24px"
-                                            xmlSpace="preserve"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlnsXlink="http://www.w3.org/1999/xlink"
-                                        >
-                                            <g><g><path d="M9.362,9.158c0,0-3.16,0.35-5.268,0.584c-0.19,0.023-0.358,0.15-0.421,0.343s0,0.394,0.14,0.521    c1.566,1.429,3.919,3.569,3.919,3.569c-0.002,0-0.646,3.113-1.074,5.19c-0.036,0.188,0.032,0.387,0.196,0.506    c0.163,0.119,0.373,0.121,0.538,0.028c1.844-1.048,4.606-2.624,4.606-2.624s2.763,1.576,4.604,2.625    c0.168,0.092,0.378,0.09,0.541-0.029c0.164-0.119,0.232-0.318,0.195-0.505c-0.428-2.078-1.071-5.191-1.071-5.191    s2.353-2.14,3.919-3.566c0.14-0.131,0.202-0.332,0.14-0.524s-0.23-0.319-0.42-0.341c-2.108-0.236-5.269-0.586-5.269-0.586    s-1.31-2.898-2.183-4.83c-0.082-0.173-0.254-0.294-0.456-0.294s-0.375,0.122-0.453,0.294C10.671,6.26,9.362,9.158,9.362,9.158z" /></g></g>
-                                        </svg>
-                                    </label>
-                                </div>
-                            </div>
-
-                            {/* Resource Details */}
-                            <div className="mb-4">
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>{name}</DialogTitle>
                                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
                                     {folderName}
                                 </div>
-                                <div className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-                                    <span className="font-medium">Description:</span> {description || "No description available."}
-                                </div>
-
-                                {/* Resource Content */}
+                                <DialogDescription><span className="font-medium">Description:</span> {description || "No description available."}</DialogDescription>
                                 <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-900 mb-4">
                                     {type === 0 && (
-                                        <div>
-                                            <div className="font-medium mb-2 text-gray-700 dark:text-gray-300">Resource URL</div>
-                                            <div className="flex items-center mb-2">
-                                                <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all flex-grow">
-                                                    {url}
-                                                </a>
-                                                <button
-                                                    className="ml-2 p-2 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700 rounded"
-                                                    title="Copy URL"
-                                                    onClick={() => navigator.clipboard.writeText(url)}
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                    </svg>
-                                                </button>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="grid flex-1 gap-2">
+                                                <Label htmlFor="link" className="sr-only">
+                                                    Link
+                                                </Label>
+                                                <Input
+                                                    id="link"
+                                                    defaultValue={url}
+                                                    readOnly
+                                                />
                                             </div>
+                                            <Button type="submit" size="sm" className="px-3">
+                                                <span className="sr-only">Copy</span>
+                                                <Copy />
+                                            </Button>
                                         </div>
                                     )}
 
@@ -331,144 +235,123 @@ function CardResource(props: ResourceProps) {
                                         </div>
                                     )}
                                 </div>
-                            </div>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button type="button" variant="secondary">
+                                        Close
+                                    </Button>
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                    <div className="flex space-x-2">
+                        {/* Edit */}
+                        <AlertDialog>
+                            <AlertDialogTrigger className='text-base hover:text-yellow-500 dark:text-gray-300 dark:hover:text-yellow-400'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Edit Resource</AlertDialogTitle>
+                                    <form className="space-y-4">
+                                        {/* Name */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={editName}
+                                                onChange={(e) => setEditName(e.target.value)}
+                                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                                required
+                                            />
+                                        </div>
 
-                            {/* Modal Actions */}
-                            <div className="flex justify-end space-x-3">
-                                {/*                                 <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
-                                        <path d="M16 5l3 3" />
-                                    </svg>
-                                    Edit
-                                </button>
-                                <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-trash">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M4 7l16 0" />
-                                        <path d="M10 11l0 6" />
-                                        <path d="M14 11l0 6" />
-                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                    </svg>
-                                    Delete
-                                </button> */}
-                                <button
-                                    className="px-4 py-2 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                                    onClick={() => setIsModalOpen(false)}
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
+                                        {/* Description */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Description
+                                            </label>
+                                            <textarea
+                                                value={editDescription}
+                                                onChange={(e) => setEditDescription(e.target.value)}
+                                                className="w-full h-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
+                                                rows={3}
+                                            />
+                                        </div>
+
+                                        {/* Resource Content based on type */}
+                                        {type === 0 && (
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                    URL
+                                                </label>
+                                                <input
+                                                    type="url"
+                                                    value={editUrl}
+                                                    onChange={(e) => setEditUrl(e.target.value)}
+                                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
+                                                    required
+                                                />
+                                            </div>
+                                        )}
+
+                                        {type === 1 && (
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                    Code
+                                                </label>
+                                                <textarea
+                                                    value={editCode}
+                                                    onChange={(e) => setEditCode(e.target.value)}
+                                                    className="w-full h-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 font-mono dark:bg-gray-700 dark:text-white resize-none"
+                                                    rows={8}
+                                                />
+                                            </div>
+                                        )}
+
+                                        {type === 2 && (
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                    Text
+                                                </label>
+                                                <textarea
+                                                    value={editText}
+                                                    onChange={(e) => setEditText(e.target.value)}
+                                                    className="w-full h-48 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
+                                                    rows={8}
+                                                />
+                                            </div>
+                                        )}
+                                    </form>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel className="btn btn-outline">Cancel</AlertDialogCancel>
+                                    <AlertDialogAction className='hover:bg-blue-600 transition-colors'>Save</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                        {/* Delete */}
+                        <AlertDialog>
+                            <AlertDialogTrigger className="text-base hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you sure you want to delete this resource?</AlertDialogTitle>
+                                    <AlertDialogDescription>You are about to delete the resource <span className='font-bold text-black dark:text-white'>{name}</span>, it will remain in the trash for 30 days and then it will be automatically deleted.</AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel >Cancel</AlertDialogCancel>
+                                    <AlertDialogAction className="btn btn-error hover:text-white hover:bg-red-500">Delete</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
                 </div>
-            )}
-
-            {/* Edit Resource Modal */}
-            {isEditModalOpen && (
-                <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-50 animate-in fade-in-0 duration-200">
-                    <div className="bg-white dark:bg-gray-800 border border-black-500/75 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto animate-in zoom-in-95 duration-200">
-                        <div className="p-6">
-                            <div className="flex justify-between items-start mb-4">
-                                <h2 className="text-2xl font-bold dark:text-white">Edit Resource</h2>
-                            </div>
-
-                            {/* Edit Form */}
-                            <form className="space-y-4">
-                                {/* Name */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={editName}
-                                        onChange={(e) => setEditName(e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                                        required
-                                    />
-                                </div>
-
-                                {/* Description */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Description
-                                    </label>
-                                    <textarea
-                                        value={editDescription}
-                                        onChange={(e) => setEditDescription(e.target.value)}
-                                        className="w-full h-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
-                                        rows={3}
-                                    />
-                                </div>
-
-                                {/* Resource Content based on type */}
-                                {type === 0 && (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            URL
-                                        </label>
-                                        <input
-                                            type="url"
-                                            value={editUrl}
-                                            onChange={(e) => setEditUrl(e.target.value)}
-                                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
-                                            required
-                                        />
-                                    </div>
-                                )}
-
-                                {type === 1 && (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Code
-                                        </label>
-                                        <textarea
-                                            value={editCode}
-                                            onChange={(e) => setEditCode(e.target.value)}
-                                            className="w-full h-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 font-mono dark:bg-gray-700 dark:text-white resize-none"
-                                            rows={8}
-                                        />
-                                    </div>
-                                )}
-
-                                {type === 2 && (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Text
-                                        </label>
-                                        <textarea
-                                            value={editText}
-                                            onChange={(e) => setEditText(e.target.value)}
-                                            className="w-full h-48 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
-                                            rows={8}
-                                        />
-                                    </div>
-                                )}
-                            </form>
-
-                            {/* Modal Actions */}
-                            <div className="flex justify-end space-x-3 mt-6">
-                                <button
-                                    className="px-4 py-2 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                                    onClick={() => setIsEditModalOpen(false)}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                                    onClick={handleSaveChanges}
-                                >
-                                    Save Changes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            </div>
         </>
     );
 }
