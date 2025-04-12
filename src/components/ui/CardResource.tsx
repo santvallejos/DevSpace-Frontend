@@ -62,26 +62,22 @@ function CardResource(props: ResourceProps) {
         switch (type) {
             case 0: // URL type
                 return (
-                    <div className="border border-gray-200 dark:border-gray-700 rounded w-full bg-gray-50 dark:bg-gray-900 overflow-hidden">
-                        <div className="flex items-center">
-                            <div className="p-3 text-sm text-blue-500 dark:text-blue-400 overflow-x-auto overflow-y-auto whitespace-nowrap flex-grow no-scroll">
-                                {/* Necesito que cuando se pone el cursos encima de la url que actue como un link a la pagina y al precionar lleve a la pagina, puedes agregarle algo de estilos*/}
-                                <a href={url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 dark:text-blue-400 cursor-pointer hover:underline">
-                                    {url}
-                                </a>
+                    <div className="w-full">
+                        <div className="flex items-center space-x-2">
+                            <div className="grid flex-1 gap-2">
+                                <Label htmlFor="link" className="sr-only">
+                                    Link
+                                </Label>
+                                <Input
+                                    id="link"
+                                    defaultValue={url}
+                                    readOnly
+                                />
                             </div>
-                            {/* Copy URL */}
-                            <button
-                                className="p-3 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
-                                title="Copy URL"
-                                onClick={() => {
-                                    navigator.clipboard.writeText(url);
-                                }}
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                </svg>
-                            </button>
+                            <Button type="submit" size="sm" className="px-3 hover:bg-blue-500">
+                                <span className="sr-only">Copy</span>
+                                <Copy />
+                            </Button>
                         </div>
                     </div>
                 );
@@ -184,9 +180,27 @@ function CardResource(props: ResourceProps) {
                                                     readOnly
                                                 />
                                             </div>
-                                            <Button type="submit" size="sm" className="px-3">
+                                            <Button 
+                                                type="button" 
+                                                size="sm" 
+                                                className="px-3 hover:bg-blue-500"
+                                                onClick={() => navigator.clipboard.writeText(url)}
+                                            >
                                                 <span className="sr-only">Copy</span>
                                                 <Copy />
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                className="px-3 hover:bg-green-500"
+                                                onClick={() => window.open(url, '_blank')}
+                                            >
+                                                <span className="sr-only">Visit</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                                </svg>
                                             </Button>
                                         </div>
                                     )}
