@@ -112,6 +112,7 @@ function AppDashboard(){
                 favoriteResources.map((resource, index) => (
                   <CardResource
                     key={resource.id || index} 
+                    id={resource.id || ''}
                     name={resource.name || ''} 
                     folderName={resource.folderName || ''}
                     description={resource.description || ''}

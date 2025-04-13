@@ -3,7 +3,6 @@ import { Copy } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
 import {
     AlertDialog,
     AlertDialogAction,
@@ -15,7 +14,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-
 import {
     Dialog,
     DialogContent,
@@ -26,8 +24,10 @@ import {
     DialogFooter,
     DialogClose
 } from "@/components/ui/dialog"
+import { DeleteResource } from '@/services/resourcesServices';
 
 interface ResourceProps {
+    id: string
     name: string;
     folderName: string;
     description?: string;
@@ -40,7 +40,7 @@ interface ResourceProps {
 
 function CardResource(props: ResourceProps) {
     //Propiedades que se tienen que pasar al recurso
-    const { name, folderName, description, type, url, code, text, favorite } = props;
+    const { id, name, folderName, description, type, url, code, text, favorite } = props;
     const [isFavorite, setIsFavorite] = useState(favorite); // Estado para controlar si el recurso está marcado como favorito
 
     // Estados para el formulario de edición
@@ -49,8 +49,6 @@ function CardResource(props: ResourceProps) {
     const [editUrl, setEditUrl] = useState(url);
     const [editCode, setEditCode] = useState(code || "");
     const [editText, setEditText] = useState(text || "");
-
-
 
     // Función para manejar el cambio de estado de favorito
     const handleFavoriteToggle = () => {
@@ -111,6 +109,15 @@ function CardResource(props: ResourceProps) {
                         <span className="text-sm text-gray-500 dark:text-gray-400">Resource preview not available</span>
                     </div>
                 );
+        }
+    };
+
+    const handleDeleteResource = async () => {
+        try{
+            await DeleteResource(id);
+            console.log("Recurso eliminado con éxito");
+        } catch (error) {
+            console.error("Error al eliminar el recurso:", error);
         }
     };
 
@@ -359,7 +366,7 @@ function CardResource(props: ResourceProps) {
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                     <AlertDialogCancel >Cancel</AlertDialogCancel>
-                                    <AlertDialogAction className="btn btn-error hover:text-white hover:bg-red-500">Delete</AlertDialogAction>
+                                    <AlertDialogAction className="btn btn-error hover:text-white hover:bg-red-500" onClick={handleDeleteResource}>Delete</AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>
