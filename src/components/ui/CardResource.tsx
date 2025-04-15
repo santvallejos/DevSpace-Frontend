@@ -36,6 +36,7 @@ interface ResourceProps {
     code?: string;
     text?: string;
     favorite: boolean;
+    onDelete?: () => void;
 }
 
 function CardResource(props: ResourceProps) {
@@ -115,7 +116,9 @@ function CardResource(props: ResourceProps) {
     const handleDeleteResource = async () => {
         try{
             await DeleteResource(id);
-            console.log("Recurso eliminado con éxito");
+            if (props.onDelete) {
+                props.onDelete();
+            }
         } catch (error) {
             console.error("Error al eliminar el recurso:", error);
         }

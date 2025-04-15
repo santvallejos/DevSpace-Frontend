@@ -29,23 +29,23 @@ function AppDashboard(){
             });
         }
     }, [activeSection]);
-    
+
     // Obtener los recursos favoritos del usuario
+    const fetchFavoriteResources = async () => {
+      if (activeSection === "favorites") {
+          try {
+              setIsLoading(true);
+              const resources = await GetFavoriteResources();
+              setFavoriteResources(resources);
+          } catch (error) {
+              console.error("Error fetching favorite resources:", error);
+          } finally {
+              setIsLoading(false);
+          }
+      }
+  };
+
     useEffect(() => {
-        const fetchFavoriteResources = async () => {
-            if (activeSection === "favorites") {
-                try {
-                    setIsLoading(true);
-                    const resources = await GetFavoriteResources();
-                    setFavoriteResources(resources);
-                } catch (error) {
-                    console.error("Error fetching favorite resources:", error);
-                } finally {
-                    setIsLoading(false);
-                }
-            }
-        };
-        
         fetchFavoriteResources();
     }, [activeSection]);
 
@@ -121,6 +121,8 @@ function AppDashboard(){
                     code={resource.code || ''}
                     text={resource.text || ''}
                     favorite={resource.favorite}
+                    // Cuando se elimina un recursos recargamos la lista de favoritos
+                    onDelete={fetchFavoriteResources}
                   />
                 ))
               ) : (
